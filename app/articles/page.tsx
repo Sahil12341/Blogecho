@@ -1,7 +1,4 @@
-
-import {
-  AllArticlesPage, 
-} from "@/components/articles/all-articles-page";
+import { AllArticlesPage } from "@/components/articles/all-articles-page";
 import ArticleSearchInput from "@/components/articles/article-search-input";
 import { Button } from "@/components/ui/button";
 import React, { Suspense } from "react";
@@ -9,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchArticleByQuery } from "@/lib/query/fetch-articles";
 import Link from "next/link";
+import { AllArticlesPageSkeleton } from "@/components/skeletons/article-skeleton";
 
 type SearchPageProps = {
   searchParams: { search?: string; page?: string };
@@ -24,7 +22,6 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
 
   const { articles, total } = await fetchArticleByQuery(searchText, skip, take);
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
- 
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,18 +37,15 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
           </Suspense>
         </div>
         {/* All article page  */}
-        <Suspense fallback={<AllArticlesPageSkeleton/>}>
-        <AllArticlesPage articles={articles} />
+        <Suspense fallback={<AllArticlesPageSkeleton />}>
+          <AllArticlesPage articles={articles} />
         </Suspense>
         {/* <AllArticlesPageSkeleton/> */}
-        
+
         {/* Pagination */}
         <div className="mt-12 flex justify-center gap-2">
           {/* Prev Button */}
-          <Link
-            href={`?search=${searchText}&page=${currentPage - 1}`}
-            passHref
-          >
+          <Link href={`?search=${searchText}&page=${currentPage - 1}`}>
             <Button variant="ghost" size="sm" disabled={currentPage === 1}>
               ← Prev
             </Button>
@@ -65,7 +59,9 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
               passHref
             >
               <Button
-                variant={`${currentPage === index + 1 ? 'destructive' : 'ghost'}`}
+                variant={`${
+                  currentPage === index + 1 ? "destructive" : "ghost"
+                }`}
                 size="sm"
                 disabled={currentPage === index + 1}
               >
@@ -75,10 +71,7 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
           ))}
 
           {/* Next Button */}
-          <Link
-            href={`?search=${searchText}&page=${currentPage + 1}`}
-            passHref
-          >
+          <Link href={`?search=${searchText}&page=${currentPage + 1}`}>
             <Button
               variant="ghost"
               size="sm"
@@ -95,40 +88,4 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
 
 export default page;
 
-export function AllArticlesPageSkeleton() {
-  return (
-    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <Card
-          key={index}
-          className="group relative overflow-hidden transition-all hover:shadow-lg"
-        >
-          <div className="p-6">
-            {/* Article Image Skeleton */}
-            <Skeleton className="mb-4 h-48 w-full rounded-xl bg-gradient-to-br from-purple-100/50 to-blue-100/50 dark:from-purple-900/20 dark:to-blue-900/20" />
 
-            {/* Article Title Skeleton */}
-            <Skeleton className="h-6 w-3/4 rounded-lg" />
-
-            {/* Article Category Skeleton */}
-            <Skeleton className="mt-2 h-4 w-1/2 rounded-lg" />
-
-            {/* Author & Metadata Skeleton */}
-            <div className="mt-6 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                {/* Author Avatar Skeleton */}
-                <Skeleton className="h-8 w-8 rounded-full" />
-
-                {/* Author Name Skeleton */}
-                <Skeleton className="h-4 w-20 rounded-lg " />
-              </div>
-
-              {/* Date Skeleton */}
-              <Skeleton className="h-4 w-24 rounded-lg " />
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-}

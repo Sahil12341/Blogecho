@@ -33,7 +33,7 @@ model Post {
   featuredImage String
   author        User      @relation(fields: [authorId], references: [id])
   authorId      String
-  comments      Comment[]
+  comments      Comment[]  
   likes         Like[]
   createdAt     DateTime  @default(now())
 }
@@ -43,7 +43,7 @@ model Comment {
   body      String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
   createdAt DateTime @default(now())
 }
