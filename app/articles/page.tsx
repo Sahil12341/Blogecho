@@ -5,6 +5,7 @@ import React, { Suspense } from "react";
 import { fetchArticleByQuery } from "@/lib/query/fetch-articles";
 import Link from "next/link";
 import { AllArticlesPageSkeleton } from "@/components/skeletons/article-skeleton";
+export const dynamic = "force-dynamic";
 
 type SearchPageProps = {
   searchParams: Promise<{ search?: string; page?: string }>;
@@ -40,7 +41,7 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
             All Articles
           </h1>
           {/* Search Bar */}
-          <Suspense>
+          <Suspense fallback={<div />}>
             <ArticleSearchInput />
           </Suspense>
         </div>

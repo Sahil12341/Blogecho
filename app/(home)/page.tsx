@@ -4,11 +4,14 @@ import HeroSection from "@/components/home/hero-section";
 import TopArticles from "@/components/home/top-articles";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import React, { Suspense } from "react";
 
 export default function Home() {
   return (
     <div>
+      <Suspense fallback={<div />} >        
       <Navbar />
+      </Suspense>
       <HeroSection />
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4">
@@ -18,8 +21,8 @@ export default function Home() {
             </h2>
             <p>Discover our most popular and trending content</p>
           </div>
+            <TopArticles />
 
-          <TopArticles />
           <div className="text-center mt-12 ">
             <Link href={"/articles"}>
               <Button className="rounded-full hover:bg-gray-900 hover:text-white dark:bg-white dark:hover:text-gray-900">
