@@ -26,8 +26,8 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
   // Helper function to build search URLs
   const buildSearchUrl = (page: number) => {
     const url = new URLSearchParams();
-    if (searchText) url.set('search', searchText);
-    if (page > 1) url.set('page', page.toString());
+    if (searchText) url.set("search", searchText);
+    if (page > 1) url.set("page", page.toString());
     return `?${url.toString()}`;
   };
 
@@ -49,9 +49,11 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
         {searchText && (
           <div className="mb-6 text-center text-sm text-muted-foreground">
             {total > 0 ? (
-              <>Found {total} article{total !== 1 ? 's' : ''} for "{searchText}"</>
+              <>{`Found ${total} article${
+                total !== 1 ? "s" : ""
+              } for "${searchText}"`}</>
             ) : (
-              <>No articles found for "{searchText}"</>
+              <>{`No articles found for "${searchText}"`}</>
             )}
           </div>
         )}
@@ -85,7 +87,9 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
                 return (
                   <Link key={pageNum} href={buildSearchUrl(pageNum)}>
                     <Button
-                      variant={currentPage === pageNum ? "destructive" : "ghost"}
+                      variant={
+                        currentPage === pageNum ? "destructive" : "ghost"
+                      }
                       size="sm"
                       disabled={currentPage === pageNum}
                     >
@@ -113,13 +117,18 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
 
                 {/* Pages around current */}
                 {Array.from({ length: 3 }).map((_, index) => {
-                  const pageNum = Math.max(2, Math.min(totalPages - 1, currentPage - 1 + index));
+                  const pageNum = Math.max(
+                    2,
+                    Math.min(totalPages - 1, currentPage - 1 + index)
+                  );
                   if (pageNum === 1 || pageNum === totalPages) return null;
-                  
+
                   return (
                     <Link key={pageNum} href={buildSearchUrl(pageNum)}>
                       <Button
-                        variant={currentPage === pageNum ? "destructive" : "ghost"}
+                        variant={
+                          currentPage === pageNum ? "destructive" : "ghost"
+                        }
                         size="sm"
                         disabled={currentPage === pageNum}
                       >
@@ -130,13 +139,17 @@ const page: React.FC<SearchPageProps> = async ({ searchParams }) => {
                 })}
 
                 {/* Ellipsis if needed */}
-                {currentPage < totalPages - 3 && <span className="px-2">...</span>}
+                {currentPage < totalPages - 3 && (
+                  <span className="px-2">...</span>
+                )}
 
                 {/* Last page */}
                 {totalPages > 1 && (
                   <Link href={buildSearchUrl(totalPages)}>
                     <Button
-                      variant={currentPage === totalPages ? "destructive" : "ghost"}
+                      variant={
+                        currentPage === totalPages ? "destructive" : "ghost"
+                      }
                       size="sm"
                       disabled={currentPage === totalPages}
                     >
