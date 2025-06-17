@@ -1,11 +1,14 @@
+import Image from "next/image";
+
 export default function LicensesPage() {
   return (
     <div className="relative">
-      <img
+      <Image
       loading="lazy"
         src="https://source.unsplash.com/5QgIuuBxKwM/1920x1080"
         alt="legal papers background"
         className="absolute inset-0 w-full h-full object-cover opacity-30"
+        fill
       />
       <main className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-4xl font-bold mb-6">Licenses</h1>

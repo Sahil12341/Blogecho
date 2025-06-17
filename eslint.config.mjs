@@ -18,6 +18,15 @@ const eslintConfig = [
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+   {
+    rules: {
+      // Escape quotes in JSX
+      "react/no-unescaped-entities": "off", // or "off" to disable
+      // Any other custom rule
+      "no-console": "warn",
+    },
+  },
+
 ];
 
 export default eslintConfig;

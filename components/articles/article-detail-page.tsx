@@ -5,7 +5,7 @@ import CommentForm from "../comments/comment-form";
 import CommentList from "../comments/comment-list";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { User } from "@/app/generated/prisma"; // ✅ Fixed import path
+import { User } from "@/app/generated/prisma"; // Fixed import path
 import LikeButton from "./like-button";
 
 type ArticleDetailPageProps = {
@@ -24,9 +24,9 @@ type ArticleDetailPageProps = {
 };
 
 export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
-  // ✅ Add error handling for database operations
+  // Add error handling for database operations
   try {
-    // ✅ Fetch all data in parallel for better performance
+    //  Fetch all data in parallel for better performance
     const [comments, likes, userId] = await Promise.all([
       prisma.comment.findMany({
         where: {
@@ -48,7 +48,7 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
       auth().then(auth => auth.userId)
     ]);
 
-    // ✅ Handle case where user is not logged in
+    // Handle case where user is not logged in
     let user: User | null = null;
     let isLiked = false;
 
@@ -134,8 +134,9 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
     );
   } catch (error) {
     console.error('Error in ArticleDetailPage:', error);
-    
-    // ✅ Return a proper error state instead of throwing
+  }
+
+    // Return a proper error state instead of throwing
     return (
       <div className="min-h-screen bg-background">
         <main className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -153,4 +154,3 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
       </div>
     );
   }
-}

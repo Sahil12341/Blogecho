@@ -4,6 +4,7 @@ import { handleContactSubmit } from "@/actions/contact-action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
 import React, { useState, useTransition } from "react";
 
 export default function ContactPage() {
@@ -13,10 +14,11 @@ export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-gray-900 text-white">
       {/* Background Image */}
-      <img 
+      <Image
       loading="lazy"
       src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0'
       alt="contact page background"
+      fill
       className="absolute inset-0 bg-cover w-full h-full object-cover bg-center opacity-30"
       />
 
