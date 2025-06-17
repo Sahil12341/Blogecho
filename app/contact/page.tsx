@@ -29,7 +29,7 @@ export default function ContactPage() {
       <div className="relative z-10 flex flex-col items-center justify-center px-4 py-24">
         {/* Intro Text */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-2">Let’s build something together</h1>a
+          <h1 className="text-4xl font-bold mb-2">Let’s build something together</h1>
           <p className="text-lg text-gray-300 max-w-xl">
             Whether you have a question or just want to say hi, I’ll try my best to get back to you!
           </p>

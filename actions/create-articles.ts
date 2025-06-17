@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
@@ -46,7 +47,7 @@ export const createArticles = async (
     };
   }
 
-  // ✅ Fix: Get Clerk User ID and check authentication
+  // Get Clerk User ID and check authentication
   const { userId } = await auth();
 
   if (!userId) {
@@ -57,20 +58,25 @@ export const createArticles = async (
     };
   }
 
-  // ✅ Fix: Find the actual user using `clerkUserId` and get their `id`
-  const existingUser = await prisma.user.findUnique({
-    where: { clerkUserId: userId },
+  // Find the actual user using `clerkUserId` and get their `id`
+  let existingUser = await prisma.user.findUnique({
+  where: { clerkUserId: userId },
+});
+
+if (!existingUser) {
+  const clerkUser = await clerkClient.users.getUser(userId);
+
+  existingUser = await prisma.user.create({
+    data: {
+      clerkUserId: userId,
+      name: clerkUser.firstName ?? "Anonymous",
+      email: clerkUser.emailAddresses[0]?.emailAddress ?? "no-email@example.com",
+      // Add any other required fields from your User model
+    },
   });
+}
 
-  if (!existingUser) {
-    return {
-      errors: {
-        formErrors: ["User not found. Please register before creating an article."],
-      },
-    };
-  }
-
-  // ✅ Fix: Handle image upload properly
+  //Handle image upload properly
   const imageFile = formData.get("featuredImage") as File | null;
  
   if (!imageFile || imageFile?.name === "undefined") {
@@ -87,7 +93,7 @@ export const createArticles = async (
   const uploadResult: UploadApiResponse | undefined = await new Promise(
     (resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto" }, // ✅ Fix: Ensure correct file type handling
+        { resource_type: "auto" }, //Ensure correct file type handling
         (error, result) => {
           if (error) {
             reject(error);
@@ -111,14 +117,14 @@ export const createArticles = async (
   }
 
   try {
-    // ✅ Fix: Use `existingUser.id` instead of `userId` (which is `clerkUserId`)
+    // Use `existingUser.id` instead of `userId` (which is `clerkUserId`)
     await prisma.post.create({
       data: {
         title: result.data.title,
         category: result.data.category,
         content: result.data.content,
         featuredImage: imageUrl,
-        authorId: existingUser.id, // ✅ Correct Foreign Key Usage
+        authorId: existingUser.id, //Correct Foreign Key Usage
       },
     });
   } catch (error: unknown) {
