@@ -58,3 +58,10 @@ model Like {
 
   @@unique([userId, postId]) // ensure a user can like a post only once
 }
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}

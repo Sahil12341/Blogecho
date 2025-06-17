@@ -9,9 +9,6 @@ import React, { Suspense } from "react";
 export default function Home() {
   return (
     <div>
-      <Suspense fallback={<div />} >        
-      <Navbar />
-      </Suspense>
       <HeroSection />
       <section className="relative py-16 md:py-24">
         <div className="container mx-auto px-4">

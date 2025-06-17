@@ -43,7 +43,7 @@ model Comment {
   body      String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
   createdAt DateTime @default(now())
 }
@@ -57,4 +57,12 @@ model Like {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId]) // ensure a user can like a post only once
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
 }
