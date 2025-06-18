@@ -6,54 +6,48 @@ import SearchInput from "./SearchInput";
 import ToggleMode from "./ToggleMode";
 import { Menu, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2">
       <div className=" container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/*LEft Section*/}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="font-bold text-2xl">
-                <span className="bg-gradient-to-r from-purple-600 to bg-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                  ECHO
+              <span className="flex flex-col font-bold text-3xl leading-none text-center">
+                <span className="block justify-start bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                  EC
+                </span>
+                <span className="block pl-2 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                  HO
                 </span>
               </span>
             </Link>
           </div>
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link
-              href={"/"}
-              className="text-sm font-medium text-foreground transition-colors hover:text-foreground"
-            >
-              Home
-            </Link>
-
-            <Link
-              href={"/articles"}
-              className="text-sm font-medium text-foreground transition-colors hover:text-foreground"
-            >
-              Articles
-            </Link>
-
-            <Link
-              href={"/contact"}
-              className="text-sm font-medium text-foreground transition-colors hover:text-foreground"
-            >
-              Contact
-            </Link>
-
-            <Link
-              href={"/dashboard"}
-              className="text-sm font-medium text-foreground transition-colors hover:text-foreground"
-            >
-              Dashboard
-            </Link>
+          <div className="flex gap-4">
+            {["Home", "Articles", "Contact", "Dashboard"].map((label, i) => (
+              <Link
+                key={i}
+                href={`/${
+                  label.toLowerCase() === "home" ? "" : label.toLowerCase()
+                }`}
+                className="inline-block px-4 py-2 text-md font-semibold text-foreground transition-all duration-200 ease-in-out 
+                 hover:-translate-y-1 hover:scale-105 hover:bg-gradient-to-r from-purple-600 to-indigo-600 hover:text-white rounded-md group"
+              >
+                {label}
+              </Link>
+            ))}
           </div>
 
           {/* RIght Section */}
@@ -70,10 +64,10 @@ const Navbar = () => {
             <SignedOut>
               <div className="hidden md:flex items-center gap-2">
                 <SignInButton>
-                <Button variant={'outline'}>Login</Button>
+                  <Button variant={"outline"}>Login</Button>
                 </SignInButton>
                 <SignUpButton>
-                <Button>Signup</Button>
+                  <Button>Signup</Button>
                 </SignUpButton>
               </div>
             </SignedOut>
@@ -145,16 +139,16 @@ const Navbar = () => {
 
           {/* Mobile Auth Buttons */}
           <SignedOut>
-          <div className="px-4 flex flex-col gap-2">
-            <SignInButton>
-            <Button variant="outline" className="w-full">
-              Login
-            </Button>
-            </SignInButton> 
-            <SignUpButton>
-            <Button className="w-full">Sign up</Button>
-            </SignUpButton>
-          </div>
+            <div className="px-4 flex flex-col gap-2">
+              <SignInButton>
+                <Button variant="outline" className="w-full">
+                  Login
+                </Button>
+              </SignInButton>
+              <SignUpButton>
+                <Button className="w-full">Sign up</Button>
+              </SignUpButton>
+            </div>
           </SignedOut>
         </div>
       )}

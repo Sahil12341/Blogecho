@@ -1,28 +1,29 @@
 import Image from "next/image";
+import codingLogo from '@/public/coding.webp'
 
 export default function LicensesPage() {
   return (
     <div className="relative">
       <Image
       loading="lazy"
-        src="https://source.unsplash.com/5QgIuuBxKwM/1920x1080"
+        src={codingLogo}
         alt="legal papers background"
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        className="absolute inset-0 w-full h-full object-cover opacity-35"
         fill
       />
       <main className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-4xl font-bold mb-6">Licenses</h1>
-        <p className="mb-4 text-gray-700">
+        <p className="mt-6 text-black dark:text-gray-200">
           ECHO uses open-source tools and assets with appreciation. Here’s what
           powers the echo chamber:
         </p>
 
-        <ul className="list-disc ml-6 text-gray-700 space-y-2">
+        <ul className="list-disc ml-6 text-black dark:text-white space-y-2">
           <li>
             <strong>Next.js</strong> — MIT License —{" "}
             <a
               href="https://github.com/vercel/next.js/blob/canary/license.md"
-              className="text-blue-600 hover:underline"
+              className="text-blue-300 hover:underline"
             >
               View License
             </a>
@@ -40,14 +41,14 @@ export default function LicensesPage() {
             <strong>React</strong> — MIT License —{" "}
             <a
               href="https://github.com/facebook/react/blob/main/LICENSE"
-              className="text-blue-600 hover:underline"
+              className="text-blue-300 hover:underline"
             >
               View License
             </a>
           </li>
         </ul>
 
-        <p className="mt-6 text-gray-700">
+        <p className="mt-6 text-black dark:text-white">
           Any blog images, icons, or fonts used will be credited where
           appropriate. If we missed something, let us know — we believe in
           open-source karma.

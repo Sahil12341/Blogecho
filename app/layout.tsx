@@ -40,9 +40,6 @@ export default function RootLayout({
           >
             <div>
               <div>
-                <Suspense fallback={<div />}>
-                  <Navbar />
-                </Suspense>
                 {children}
               </div>
             </div>
