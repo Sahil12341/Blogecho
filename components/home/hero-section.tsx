@@ -58,7 +58,7 @@ const HeroSection = () => {
         <div className="mt-12 flex-1 md:mt-0">
           <div
             className={cn(
-              "relative mx-auto h-64 w-64 rounded-2xl overflow-hidden",
+              "relative mx-auto w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] rounded-2xl overflow-hidden",
               "bg-gradient-to-br from-white/5 to-transparent",
               "border border-primary/20 backdrop-blur-lg",
               "shadow-2xl shadow-indigo-500/10"
@@ -68,7 +68,7 @@ const HeroSection = () => {
               src="https://images.unsplash.com/photo-1485988412941-77a35537dae4?q=80&w=2992&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Illustration for the blog"
               fill
-              className="object-cover"
+              className="object-cover"         
             />
           </div>
         </div>

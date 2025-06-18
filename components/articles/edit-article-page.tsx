@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, startTransition, useActionState, useState } from "react";
+import { FormEvent, startTransition, useActionState, useState, useEffect } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { updateArticles } from "@/actions/update-article";
 import Image from "next/image";
 import { Post } from "@/app/generated/prisma";
+import { useRouter } from "next/navigation";
+
 
 type EditPropsPage = {
   article: Post;
@@ -17,8 +19,16 @@ const EditArticlePage: React.FC<EditPropsPage> = ({ article }) => {
   const [content, setContent] = useState(article.content);
   const [formState, action, isPending] = useActionState(
     updateArticles.bind(null, article.id),
-    { errors: {} }
+    { errors: {}, success:false }
   );
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if(formState.success){
+      router.push('/dashboard')
+    }
+  },[formState.success, router]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,7 +49,7 @@ const EditArticlePage: React.FC<EditPropsPage> = ({ article }) => {
           <CardTitle className="text-2xl">Edit Article</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} method="POST" className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title">Article Title</Label>
               <Input

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 const createCommentSchema = z.object({
     body: z.string().min(1)
@@ -32,16 +33,31 @@ export const createComments = async (articleId:string,prevState: CreateCommentFo
             }
         }
     }
-    const existingUser = await prisma.user.findUnique({
-        where:{clerkUserId:userId}
-    });
-    if (!existingUser) {
-        return {
-          errors: {
-            formErrors: ["User not found. Please register before adding comment."],
-          },
-        };
-      }
+
+    let existingUser = await prisma.user.findUnique({
+  where: { clerkUserId: userId },
+});
+
+if (!existingUser) {
+  const clerkUser = await clerkClient.users.getUser(userId); // fetch from Clerk backend
+  if (!clerkUser) {
+    return {
+      errors: {
+        formErrors: ["User not found in Clerk."],
+      },
+    };
+  }
+  // Create user in your DB using Clerk info
+  existingUser = await prisma.user.create({
+    data: {
+      clerkUserId: userId,
+      email: clerkUser.emailAddresses[0]?.emailAddress ?? "",
+      name: clerkUser.username || `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`,
+      image: clerkUser.imageUrl,
+    },
+  });
+}
+
     try {
         await prisma.comment.create({
             data:{
