@@ -1,5 +1,5 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import {
@@ -98,15 +98,32 @@ type DeleteButtonProps = {
 
 const DeleteButton : React.FC<DeleteButtonProps> = ({articleId}) => {
   const [isPending, startTransition] = useTransition();
-  return (
-    <form action={()=>{
+  const [ error, setError ] = useState('')
+
+   const HandleDelete =()=>{
       startTransition(async()=>{
-        await deleteArticle(articleId);
-      });
-    }}>
-      <Button disabled={isPending} variant={"ghost"} size={"sm"} type="submit">
+        const result = await deleteArticle(articleId);
+
+        if(!result.success){
+          setError(result.error || "Something went wrong!");
+        } else{
+          setError('');
+        }
+      })
+    }
+  return(
+    <div className="relative">
+
+      <Button disabled={isPending} variant={"ghost"} size={"sm"} type="submit" onClick={HandleDelete}>
         {isPending ? "Deleting..." : "Delete"}
       </Button>
-    </form>
+    
+       {error && (
+        <p className="absolute left-0 mt-1 text-xs text-red-500 opacity-80">
+          {error}
+        </p>
+      )}
+    </div>
+  
   );
 };

@@ -24,8 +24,8 @@ const Navbar = () => {
           {/*LEft Section*/}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="flex flex-col font-bold text-3xl leading-none text-center">
-                <span className="block justify-start bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+              <span className="flex flex-col font-bold text-2xl leading-5 text-center">
+                <span className="block bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
                   EC
                 </span>
                 <span className="block pl-2 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
@@ -35,7 +35,7 @@ const Navbar = () => {
             </Link>
           </div>
           {/* Desktop Menu */}
-          <div className="flex gap-4">
+          <div className="hidden md:flex gap-4">
             {["Home", "Articles", "Contact", "Dashboard"].map((label, i) => (
               <Link
                 key={i}
@@ -43,7 +43,7 @@ const Navbar = () => {
                   label.toLowerCase() === "home" ? "" : label.toLowerCase()
                 }`}
                 className="inline-block px-4 py-2 text-md font-semibold text-foreground transition-all duration-200 ease-in-out 
-                 hover:-translate-y-1 hover:scale-105 hover:bg-gradient-to-r from-purple-600 to-indigo-600 hover:text-white rounded-md group"
+                 hover:bg-gradient-to-r from-purple-600 to-indigo-600 hover:text-white rounded-md group"
               >
                 {label}
               </Link>
