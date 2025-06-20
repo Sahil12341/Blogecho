@@ -271,8 +271,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.7.0
-   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+   * Prisma Client JS version: 6.10.1
+   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
    */
   export type PrismaVersion = {
     client: string
@@ -1333,7 +1333,6 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
-    clerkUserId: string | null
     email: string | null
     name: string | null
     image: string | null
@@ -1341,7 +1340,6 @@ export namespace Prisma {
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    clerkUserId: string | null
     email: string | null
     name: string | null
     image: string | null
@@ -1349,7 +1347,6 @@ export namespace Prisma {
 
   export type UserCountAggregateOutputType = {
     id: number
-    clerkUserId: number
     email: number
     name: number
     image: number
@@ -1359,7 +1356,6 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
-    clerkUserId?: true
     email?: true
     name?: true
     image?: true
@@ -1367,7 +1363,6 @@ export namespace Prisma {
 
   export type UserMaxAggregateInputType = {
     id?: true
-    clerkUserId?: true
     email?: true
     name?: true
     image?: true
@@ -1375,7 +1370,6 @@ export namespace Prisma {
 
   export type UserCountAggregateInputType = {
     id?: true
-    clerkUserId?: true
     email?: true
     name?: true
     image?: true
@@ -1456,7 +1450,6 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
-    clerkUserId: string
     email: string
     name: string
     image: string | null
@@ -1481,7 +1474,6 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clerkUserId?: boolean
     email?: boolean
     name?: boolean
     image?: boolean
@@ -1493,7 +1485,6 @@ export namespace Prisma {
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clerkUserId?: boolean
     email?: boolean
     name?: boolean
     image?: boolean
@@ -1501,7 +1492,6 @@ export namespace Prisma {
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clerkUserId?: boolean
     email?: boolean
     name?: boolean
     image?: boolean
@@ -1509,13 +1499,12 @@ export namespace Prisma {
 
   export type UserSelectScalar = {
     id?: boolean
-    clerkUserId?: boolean
     email?: boolean
     name?: boolean
     image?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clerkUserId" | "email" | "name" | "image", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "image", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     post?: boolean | User$postArgs<ExtArgs>
     comments?: boolean | User$commentsArgs<ExtArgs>
@@ -1534,7 +1523,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      clerkUserId: string
       email: string
       name: string
       image: string | null
@@ -1965,7 +1953,6 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
-    readonly clerkUserId: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
@@ -6719,7 +6706,6 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    clerkUserId: 'clerkUserId',
     email: 'email',
     name: 'name',
     image: 'image'
@@ -6852,7 +6838,6 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
-    clerkUserId?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
     image?: StringNullableFilter<"User"> | string | null
@@ -6863,7 +6848,6 @@ export namespace Prisma {
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    clerkUserId?: SortOrder
     email?: SortOrder
     name?: SortOrder
     image?: SortOrderInput | SortOrder
@@ -6874,7 +6858,6 @@ export namespace Prisma {
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    clerkUserId?: string
     email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -6884,11 +6867,10 @@ export namespace Prisma {
     post?: PostListRelationFilter
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
-  }, "id" | "clerkUserId" | "email">
+  }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    clerkUserId?: SortOrder
     email?: SortOrder
     name?: SortOrder
     image?: SortOrderInput | SortOrder
@@ -6902,7 +6884,6 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
-    clerkUserId?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -7144,8 +7125,7 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -7155,8 +7135,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -7167,7 +7146,6 @@ export namespace Prisma {
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7178,7 +7156,6 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7188,8 +7165,7 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -7197,7 +7173,6 @@ export namespace Prisma {
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7205,7 +7180,6 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7512,7 +7486,6 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    clerkUserId?: SortOrder
     email?: SortOrder
     name?: SortOrder
     image?: SortOrder
@@ -7520,7 +7493,6 @@ export namespace Prisma {
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    clerkUserId?: SortOrder
     email?: SortOrder
     name?: SortOrder
     image?: SortOrder
@@ -7528,7 +7500,6 @@ export namespace Prisma {
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    clerkUserId?: SortOrder
     email?: SortOrder
     name?: SortOrder
     image?: SortOrder
@@ -8271,8 +8242,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutPostInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8281,8 +8251,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutPostInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8354,7 +8323,6 @@ export namespace Prisma {
 
   export type UserUpdateWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8364,7 +8332,6 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8405,8 +8372,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutCommentsInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8415,8 +8381,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8469,7 +8434,6 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8479,7 +8443,6 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8521,8 +8484,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutLikesInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8531,8 +8493,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
-    id?: string
-    clerkUserId: string
+    id: string
     email: string
     name: string
     image?: string | null
@@ -8585,7 +8546,6 @@ export namespace Prisma {
 
   export type UserUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8595,7 +8555,6 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    clerkUserId?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null

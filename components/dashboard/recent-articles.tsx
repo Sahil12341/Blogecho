@@ -32,10 +32,10 @@ type RecentArticlesProps = {
 
 const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
   return (
-    <Card className="mb-8">
-      <CardHeader>
+    <Card className="w-full max-w-[990px] h-[480px] overflow-hidden border shadow-sm">
+      <CardHeader className="border-b px-6 py-4">
         <div className="flex items-center justify-between">
-          <CardTitle>Recent Articles</CardTitle>
+          <CardTitle className="text-lg font-semibold">Recent Articles</CardTitle>
           <Button className="text-muted-foreground" size="sm" variant={"ghost"}>
             View All →
           </Button>
@@ -43,47 +43,49 @@ const RecentArticles: React.FC<RecentArticlesProps> = ({ articles }) => {
       </CardHeader>
 
       {!articles.length ? (
-        <CardContent>No Articles</CardContent>
+        <CardContent className="py-12 text-center text-sm text-muted-foreground">No Articles</CardContent>
       ) : (
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Comments</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {articles.map((article) => (
-                <TableRow key={article.id}>
-                  <TableCell>{article.title}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={"secondary"}
-                      className="rounded-full bg-green-100 text-green-800"
-                    >
-                      Published
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{article.comments.length}</TableCell>
-                  <TableCell>{article.createdAt.toDateString()}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Link href={`/dashboard/articles/${article.id}/edit`}>
-                        <Button variant={"ghost"} size={"sm"}>
-                          Edit
-                        </Button>
-                      </Link>
-                      <DeleteButton articleId={article.id}/>
-                    </div>
-                  </TableCell>
+        <CardContent className="overflow-y-auto px-0 h-full">
+          <div className="min-w-full">
+            <Table className="min-w-full text-sm">
+              <TableHeader>
+                <TableRow className="sticky top-0 bg-background z-10 border-b">
+                  <TableHead className="px-6 py-3">Title</TableHead>
+                  <TableHead className="px-6 py-3">Status</TableHead>
+                  <TableHead className="px-6 py-3">Comments</TableHead>
+                  <TableHead className="px-6 py-3">Date</TableHead>
+                  <TableHead className="px-6 py-3">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {articles.map((article) => (
+                  <TableRow key={article.id} className="hover:bg-muted/50">
+                    <TableCell className="px-6 py-3">{article.title}</TableCell>
+                    <TableCell className="px-6 py-3">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full bg-green-100 text-green-800"
+                      >
+                        Published
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-6 py-3">{article.comments.length}</TableCell>
+                    <TableCell className="px-6 py-3">{article.createdAt.toDateString()}</TableCell>
+                    <TableCell className="px-6 py-3">
+                      <div className="flex gap-2">
+                        <Link href={`/dashboard/articles/${article.id}/edit`}>
+                          <Button variant="ghost" size="sm">
+                            Edit
+                          </Button>
+                        </Link>
+                        <DeleteButton articleId={article.id} />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       )}
     </Card>

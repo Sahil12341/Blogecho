@@ -1,41 +1,53 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export async function toggleLike(postId : string) {
-  const { userId } = await auth(); // Clerk's user ID
-  if (!userId) throw new Error("You must be logged in to like an article");
-  
+export async function toggleLike(postId: string) {
+  const supabase = createServerComponentClient({ cookies: () => cookies() });
 
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-  // Ensure the user exists in the database
-  const user = await prisma.user.findUnique({
-    where: { clerkUserId: userId },
+  if (error || !user) {
+    throw new Error("You must be logged in to like an article.");
+  }
+
+  // Ensure the user exists in your local database
+  const dbUser = await prisma.user.findUnique({
+    where: { email: user.email! }, // or supabaseUserId: user.id if you track it
   });
 
-  if (!user) {
+  if (!dbUser) {
     throw new Error("User does not exist in the database.");
   }
 
-  // Check if the user has already liked the article
+  // Check if the user already liked the post
   const existingLike = await prisma.like.findFirst({
-    where: { postId, userId: user.id }, // Use `user.id`, not `clerkUserId`
+    where: {
+      postId,
+      userId: dbUser.id,
+    },
   });
 
   if (existingLike) {
-    // Unlike the article
+    // Unlike
     await prisma.like.delete({
       where: { id: existingLike.id },
     });
   } else {
-    // Like the article
+    // Like
     await prisma.like.create({
-      data: { postId, userId: user.id },
+      data: {
+        postId,
+        userId: dbUser.id,
+      },
     });
   }
 
-  // Return updated like count
-  revalidatePath(`/article/${postId}`)
+  revalidatePath(`/article/${postId}`);
 }

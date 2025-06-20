@@ -1,79 +1,76 @@
 "use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
+import { Badge } from "../ui/badge";
+import { ArrowRight, BookOpen, Tag, User } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[600px] w-full overflow-hidden bg-gradient-to-br from-purple-950 via-indigo-950 to-indigo-950">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 before:absolute before:left-1/4 before:top-0 before:h-[500px] before:w-[500px] before:rounded-full before:bg-gradient-to-r before:from-violet-600/20 before:to-indigo-600/20 before:blur-3xl" />
+   <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        {/* Background Design */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute top-0 right-0 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+        </div>
 
-      <div className="container mx-auto px-4 relative flex h-full flex-col items-center justify-center py-24 md:flex-row md:py-32 sm:px-6 lg:px-8">
-        {/* Content */}
-        <div className="flex-1 space-y-8 text-center md:text-left">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-            Explore the World Through
-            <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
-              {" "}
-              Words
-            </span>
-          </h1>
-
-          <p className="max-w-2xl text-lg text-gray-300 md:text-xl">
-            Discover insightful articles, thought-provoking stories, and expert
-            perspectives on technology, lifestyle, and innovation.
-          </p>
-
-          <div className="flex flex-col items-center gap-4 sm:flex-row md:justify-start">
-            <Button size="lg" className="rounded-full px-8 py-6 text-lg">
-              Start Reading
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full px-8 py-6 text-lg dark:text-white"
-            >
-              Explore Topics
-            </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 pt-8 md:max-w-md">
-            <div className="space-y-2">
-              <div className="text-2xl font-bold  text-white">1K+</div>
-              <div className="text-sm text-gray-400">Published Articles</div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Welcome to Echo</Badge>
+                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  Where Ideas
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    {" "}
+                    Echo{" "}
+                  </span>
+                  Through Words
+                </h1>
+                <p className="text-xl text-gray-600 leading-relaxed">
+                  Discover insightful articles, tutorials, and stories from passionate writers. Join our community of
+                  learners and creators sharing knowledge that matters.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                  Start Reading
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="lg" className="border-gray-300 hover:bg-gray-50">
+                  Browse Categories
+                </Button>
+              </div>
+              <div className="flex items-center space-x-8 text-sm text-gray-500">
+                <div className="flex items-center space-x-2">
+                  <BookOpen className="w-4 h-4" />
+                  <span>500+ Articles</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <User className="w-4 h-4" />
+                  <span>50+ Writers</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Tag className="w-4 h-4" />
+                  <span>20+ Categories</span>
+                </div>
+              </div>
             </div>
-            <div className="space-y-2">
-              <div className="text-2xl font-bold  text-white">50+</div>
-              <div className="text-sm text-gray-400">Expert Writers</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl font-bold  text-white">10M+</div>
-              <div className="text-sm text-gray-400">Monthly Readers</div>
+            <div className="relative">
+              <div className="relative z-10">
+                <Image
+                  src="/heroPhoto.jpg"
+                  alt="Hero illustration"
+                  width={600}
+                  height={500}
+                  className="rounded-sm shadow-lg"
+                />
+              </div>
+              <div className="absolute -top-4 -right-4 w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 rounded-2xl -z-10"></div>
             </div>
           </div>
         </div>
-
-        <div className="mt-12 flex-1 md:mt-0">
-          <div
-            className={cn(
-              "relative mx-auto w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] rounded-2xl overflow-hidden",
-              "bg-gradient-to-br from-white/5 to-transparent",
-              "border border-primary/20 backdrop-blur-lg",
-              "shadow-2xl shadow-indigo-500/10"
-            )}
-          >
-            <Image
-              src="https://images.unsplash.com/photo-1485988412941-77a35537dae4?q=80&w=2992&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Illustration for the blog"
-              fill
-              className="object-cover"         
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
   );
 };
 export default HeroSection;

@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { ClerkProvider } from "@clerk/nextjs";
+import { createBrowserClient } from "@supabase/ssr";
+import SupabaseProvider from "@/components/providers/supabase-provider";
+
 
 export const metadata: Metadata = {
   title: "ECHO",
   description: "A Content-Publishing Platform",
 };
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
   return (
-    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
           className="font-sans antialiased text-neutral-900 dark:text-white dark:bg-black"
@@ -22,20 +21,10 @@ export default function RootLayout({
           fontFamily: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`,
         }}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div>
-              <div>
-                {children}
-              </div>
-            </div>
-          </ThemeProvider>
+          <SupabaseProvider>
+            {children}
+          </SupabaseProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }
