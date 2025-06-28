@@ -110,12 +110,9 @@ export function ArticlesManagement() {
 
       {/* Filters */}
       <Card>
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
-        </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between ">
+            <div className="relative ">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search articles..."
@@ -124,7 +121,8 @@ export function ArticlesManagement() {
                 className="pl-10"
               />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <div className="flex gap-4">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
@@ -146,6 +144,7 @@ export function ArticlesManagement() {
                 <SelectItem value="design">Design</SelectItem>
               </SelectContent>
             </Select>
+            </div>
           </div>
         </CardContent>
       </Card>

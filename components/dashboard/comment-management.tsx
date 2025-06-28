@@ -101,8 +101,8 @@ export function CommentsManagement() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+      <div className="flex gap-4 flex-wrap">
+        <Card className="w-40"> 
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">
               {comments.filter((c) => c.status === "approved").length}
@@ -110,7 +110,7 @@ export function CommentsManagement() {
             <p className="text-sm text-gray-600">Approved</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-yellow-600">
               {comments.filter((c) => c.status === "pending").length}
@@ -118,13 +118,13 @@ export function CommentsManagement() {
             <p className="text-sm text-gray-600">Pending</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-red-600">{comments.filter((c) => c.status === "spam").length}</div>
             <p className="text-sm text-gray-600">Spam</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-orange-600">
               {comments.filter((c) => c.status === "flagged").length}
@@ -136,12 +136,9 @@ export function CommentsManagement() {
 
       {/* Filters */}
       <Card>
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
-        </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <div className="relative ">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search comments..."

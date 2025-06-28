@@ -17,7 +17,7 @@ export async function sendContactEmail(name: string, email: string, message: str
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>Message:</strong><br/>${message}</p>
   `,
-  replyTo: email, // 💡 This lets you "Reply" to the actual sender!
+  replyTo: email, // This lets you "Reply" to the actual sender!
 });
 
 }

@@ -62,7 +62,7 @@ export function LeftSidebar() {
           },
           {
             title: "Create New",
-            url: "/dashboard/articles/create",
+            url: "/write",
             icon: PlusCircle,
           },
         ],
@@ -88,7 +88,7 @@ export function LeftSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center space-x-2 px-2">
+        <div className="flex items-center space-x-2 px-2 mt-2">
           <Link href="/" className="flex items-center space-x-2">
              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-3xl font-semibold">
                     Echo
@@ -101,21 +101,25 @@ export function LeftSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {data.navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem 
+                key={item.title}>
                   {item.items ? (
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       <SidebarMenuButton
+                        size="lg"
+                        className="text-xl"
                         isActive={isActive(item.url ?? "")}
                         onClick={() => item.url && router.push(item.url)}
                       >
                         <item.icon />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
-                      <div className="ml-6 space-y-1">
+                      <div className="ml-6 space-y-2">
                         {item.items.map((subItem) => (
                           <SidebarMenuButton
                             key={`${item.title}-${subItem.title}`}
                             size="sm"
+                            className="text-lg"
                             isActive={isActive(subItem.url)}
                             onClick={() => router.push(subItem.url)}
                           >
@@ -127,6 +131,8 @@ export function LeftSidebar() {
                     </div>
                   ) : (
                     <SidebarMenuButton
+                    size="lg"
+                    className="text-xl"
                       isActive={isActive(item.url ?? "")}
                       onClick={() => item.url && router.push(item.url)}
                     >

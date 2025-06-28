@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState, useEffect, createContext, useContext } from "react"
+import type React from "react"
+import { useState, useEffect, createContext, useContext } from "react"
 import type { User, Session, AuthError } from "@supabase/supabase-js"
 
 // Mock Supabase client for development when env vars are missing
@@ -67,39 +68,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => subscription.unsubscribe()
   }, [])
-const signUp = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
 
-  if (error || !data.user) {
-    return { error };
+  const signUp = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+    return { error }
   }
 
-  // Insert user into your custom `users` table
-  const { error: insertError } = await supabase.from("users").insert({
-    id: data.user.id,          // This must match the primary key in your users table
-    email: data.user.email,
-    // add other fields if needed
-  });
-
-  if (insertError) {
-    console.error("User insert error:", insertError.message);
-    return { error: insertError };
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    return { error }
   }
-
-  return { error: null };
-};
-
-const signIn = async (email: string, password: string) => {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return { error };
-};
-
 
   const signInWithProvider = async (provider: "github" | "google") => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -126,10 +110,5 @@ const signIn = async (email: string, password: string) => {
     signOut,
   }
 
-  return (
-  <AuthContext.Provider value={value}>
-    {children}
-  </AuthContext.Provider>
-)
-
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

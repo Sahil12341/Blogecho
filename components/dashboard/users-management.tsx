@@ -119,38 +119,32 @@ export default function UsersManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Users Management</h1>
           <p className="text-gray-600">Manage all users and their permissions</p>
         </div>
-        <Button>
-          <UserPlus className="mr-2 h-4 w-4" />
-          Add New User
-        </Button>
-      </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+      <div className="flex gap-4">
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-600">{users.filter((u) => u.status === "Active").length}</div>
             <p className="text-sm text-gray-600">Active Users</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-600">{users.filter((u) => u.role === "Author").length}</div>
             <p className="text-sm text-gray-600">Authors</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-purple-600">{users.filter((u) => u.role === "Editor").length}</div>
             <p className="text-sm text-gray-600">Editors</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="w-40">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-red-600">{users.filter((u) => u.status === "Banned").length}</div>
             <p className="text-sm text-gray-600">Banned</p>
@@ -160,12 +154,9 @@ export default function UsersManagement() {
 
       {/* Filters */}
       <Card>
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
-        </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search users..."
@@ -174,7 +165,8 @@ export default function UsersManagement() {
                 className="pl-10"
               />
             </div>
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <div className="flex gap-4">
+             <Select value={roleFilter} onValueChange={setRoleFilter}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
@@ -197,6 +189,7 @@ export default function UsersManagement() {
                 <SelectItem value="banned">Banned</SelectItem>
               </SelectContent>
             </Select>
+            </div>
           </div>
         </CardContent>
       </Card>

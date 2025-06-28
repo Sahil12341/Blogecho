@@ -12,11 +12,11 @@ import {
 } from "../ui/table";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
-import { Prisma } from "@/app/generated/prisma";
+import { Prisma } from "@/lib/generated/prisma";
 import { deleteArticle } from "@/actions/delete-articles";
 
 type RecentArticlesProps = {
-  articles: Prisma.PostGetPayload<{
+  articles: Prisma.ArticleGetPayload<{
     include: {
       comments: true;
       author: {
