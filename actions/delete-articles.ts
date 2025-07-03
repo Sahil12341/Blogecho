@@ -1,9 +1,9 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { prisma } from "@/lib/prisma";
 
 export const deleteArticle = async (articleId: string) => {
   // Inline Supabase client creation
@@ -19,8 +19,8 @@ export const deleteArticle = async (articleId: string) => {
     return { success: false, error: "Unauthorized, please log in!" };
   }
 
-  // 🔍 Find the article and the author's email
-  const article = await prisma.post.findUnique({
+  // Find the article and the author's email
+  const article = await prisma.article.findUnique({
     where: { id: articleId },
     select: {
       author: {
@@ -44,7 +44,7 @@ export const deleteArticle = async (articleId: string) => {
   }
 
   //Delete the article
-  await prisma.post.delete({
+  await prisma.article.delete({
     where: { id: articleId },
   });
 

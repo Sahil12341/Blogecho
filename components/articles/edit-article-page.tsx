@@ -8,7 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { updateArticles } from "@/actions/update-article";
 import Image from "next/image";
-import { Post } from "@/app/generated/prisma";
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  featuredImage?: string;
+};
 import { useRouter } from "next/navigation";
 
 

@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState, useRef, useEffect, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -18,63 +18,83 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { MoreHorizontal, Settings, Eye, Save, Send, X, Plus, Type } from "lucide-react"
-import dynamic from "next/dynamic"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import {
+  MoreHorizontal,
+  Settings,
+  Eye,
+  Save,
+  Send,
+  X,
+  Plus,
+  Type,
+} from "lucide-react";
+import dynamic from "next/dynamic";
 
 // Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false })
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 import "react-quill-new/dist/quill.snow.css";
-import Link from "next/link"
-import { useAuth } from "@/hooks/use-auth"
+import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
 
 interface WriteEditorProps {
-  onSave?: (content: any) => void
-  onPublish?: (content: any) => void
-  initialContent?: any
+  onSave?: (content: any) => void;
+  onPublish?: (content: any) => void;
+  initialContent?: any;
 }
 
-export function WriteEditor({ onSave, onPublish, initialContent }: WriteEditorProps) {
-  const { user, loading } = useAuth()
-  const [title, setTitle] = useState(initialContent?.title || "")
-  const [subtitle, setSubtitle] = useState(initialContent?.subtitle || "")
-  const [content, setContent] = useState(initialContent?.content || "")
-  const [tags, setTags] = useState<string[]>(initialContent?.tags || [])
-  const [newTag, setNewTag] = useState("")
-  const [category, setCategory] = useState(initialContent?.category || "")
-  const [featuredImage, setFeaturedImage] = useState(initialContent?.featuredImage || "") // Added featured image
-  const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false)
+export function WriteEditor({
+  onSave,
+  onPublish,
+  initialContent,
+}: WriteEditorProps) {
+  const { user, loading } = useAuth();
+  const [title, setTitle] = useState(initialContent?.title || "");
+  const [subtitle, setSubtitle] = useState(initialContent?.subtitle || "");
+  const [content, setContent] = useState(initialContent?.content || "");
+  const [tags, setTags] = useState<string[]>(initialContent?.tags || []);
+  const [newTag, setNewTag] = useState("");
+  const [category, setCategory] = useState(initialContent?.category || "");
+  const [featuredImage, setFeaturedImage] = useState(
+    initialContent?.featuredImage || ""
+  ); // Added featured image
+  const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
   const [publishSettings, setPublishSettings] = useState({
     featured: false,
     allowComments: true,
     publishNow: true,
     scheduledDate: "",
-  })
+  });
 
-  const titleRef = useRef<HTMLInputElement>(null)
-  const subtitleRef = useRef<HTMLInputElement>(null)
-  const quillRef = useRef<any>(null)
+  const titleRef = useRef<HTMLInputElement>(null);
+  const subtitleRef = useRef<HTMLInputElement>(null);
+  const quillRef = useRef<any>(null);
 
   useEffect(() => {
     // Auto-focus title on mount
     if (titleRef.current && !title) {
-      titleRef.current.focus()
+      titleRef.current.focus();
     }
-  }, [title])
+  }, [title]);
 
-  
-useEffect(() => {
-  if (!loading) {
-    console.log("DEBUG WriteEditor user:", user);
+  useEffect(() => {
+    if (!loading) {
+      console.log("DEBUG WriteEditor user:", user);
+    }
+  }, [user, loading]);
+
+  if (loading || !user) {
+    return <div className="p-4 text-gray-500">Authenticating...</div>;
   }
-}, [user, loading]);
-
-if (loading || !user) {
-  return <div className="p-4 text-gray-500">Authenticating...</div>;
-}
 
   // Custom Quill modules and formats
   const modules = useMemo(
@@ -95,8 +115,8 @@ if (loading || !user) {
         matchVisual: false,
       },
     }),
-    [],
-  )
+    []
+  );
 
   const formats = [
     "header",
@@ -112,25 +132,25 @@ if (loading || !user) {
     "color",
     "background",
     "code-block",
-  ]
+  ];
 
   const addTag = () => {
     if (newTag.trim() && !tags.includes(newTag.trim()) && tags.length < 5) {
-      setTags([...tags, newTag.trim()])
-      setNewTag("")
+      setTags([...tags, newTag.trim()]);
+      setNewTag("");
     }
-  }
+  };
 
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove))
-  }
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      e.preventDefault()
-      addTag()
+      e.preventDefault();
+      addTag();
     }
-  }
+  };
 
   const handleSave = () => {
     if (!user?.id) {
@@ -148,11 +168,11 @@ if (loading || !user) {
       featuredImage,
       status: "draft",
       updatedAt: new Date().toISOString(),
-    }
-    
+    };
+
     console.log("Saving article data:", articleData);
-    onSave?.(articleData)
-  }
+    onSave?.(articleData);
+  };
 
   const handlePublish = () => {
     if (!user?.id) {
@@ -187,21 +207,21 @@ if (loading || !user) {
       status: "published",
       publishSettings,
       publishedAt: new Date().toISOString(),
-    }
-    
+    };
+
     console.log("Publishing article data:", articleData);
-    onPublish?.(articleData)
-    setIsPublishDialogOpen(false)
-  }
+    onPublish?.(articleData);
+    setIsPublishDialogOpen(false);
+  };
 
   // Calculate word count from HTML content
   const getWordCount = (html: string) => {
-    const text = html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ")
-    return text.split(/\s+/).filter((word) => word.length > 0).length
-  }
+    const text = html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ");
+    return text.split(/\s+/).filter((word) => word.length > 0).length;
+  };
 
-  const wordCount = getWordCount(content)
-  const readTime = Math.max(1, Math.ceil(wordCount / 200))
+  const wordCount = getWordCount(content);
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
     <div className="min-h-screen bg-white">
@@ -228,7 +248,10 @@ if (loading || !user) {
                 <Save className="h-4 w-4 mr-2" />
                 Save
               </Button>
-              <Dialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
+              <Dialog
+                open={isPublishDialogOpen}
+                onOpenChange={setIsPublishDialogOpen}
+              >
                 <DialogTrigger asChild>
                   <Button size="sm" disabled={!user?.id}>
                     <Send className="h-4 w-4 mr-2" />
@@ -238,7 +261,9 @@ if (loading || !user) {
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>Publish Article</DialogTitle>
-                    <DialogDescription>Configure your article settings before publishing.</DialogDescription>
+                    <DialogDescription>
+                      Configure your article settings before publishing.
+                    </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
@@ -249,7 +274,9 @@ if (loading || !user) {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="technology">Technology</SelectItem>
-                          <SelectItem value="programming">Programming</SelectItem>
+                          <SelectItem value="programming">
+                            Programming
+                          </SelectItem>
                           <SelectItem value="design">Design</SelectItem>
                           <SelectItem value="react">React</SelectItem>
                           <SelectItem value="css">CSS</SelectItem>
@@ -259,12 +286,17 @@ if (loading || !user) {
                     </div>
 
                     <div>
-                      <Label htmlFor="featuredImage">Featured Image URL</Label>
+                      <Label htmlFor="featuredImage">Featured Image *</Label>
                       <Input
                         id="featuredImage"
-                        placeholder="https://example.com/image.jpg"
-                        value={featuredImage}
-                        onChange={(e) => setFeaturedImage(e.target.value)}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setFeaturedImage(file);
+                          }
+                        }}
                       />
                     </div>
 
@@ -278,16 +310,27 @@ if (loading || !user) {
                           onKeyPress={handleKeyPress}
                           disabled={tags.length >= 5}
                         />
-                        <Button onClick={addTag} size="sm" disabled={tags.length >= 5 || !newTag.trim()}>
+                        <Button
+                          onClick={addTag}
+                          size="sm"
+                          disabled={tags.length >= 5 || !newTag.trim()}
+                        >
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
                       {tags.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
                           {tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="flex items-center space-x-1">
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="flex items-center space-x-1"
+                            >
                               <span>{tag}</span>
-                              <button onClick={() => removeTag(tag)} className="ml-1 hover:text-red-600">
+                              <button
+                                onClick={() => removeTag(tag)}
+                                className="ml-1 hover:text-red-600"
+                              >
                                 <X className="h-3 w-3" />
                               </button>
                             </Badge>
@@ -302,7 +345,12 @@ if (loading || !user) {
                         <Switch
                           id="featured"
                           checked={publishSettings.featured}
-                          onCheckedChange={(checked) => setPublishSettings({ ...publishSettings, featured: checked })}
+                          onCheckedChange={(checked) =>
+                            setPublishSettings({
+                              ...publishSettings,
+                              featured: checked,
+                            })
+                          }
                         />
                       </div>
 
@@ -312,7 +360,10 @@ if (loading || !user) {
                           id="comments"
                           checked={publishSettings.allowComments}
                           onCheckedChange={(checked) =>
-                            setPublishSettings({ ...publishSettings, allowComments: checked })
+                            setPublishSettings({
+                              ...publishSettings,
+                              allowComments: checked,
+                            })
                           }
                         />
                       </div>
@@ -322,16 +373,29 @@ if (loading || !user) {
                         <Switch
                           id="publishNow"
                           checked={publishSettings.publishNow}
-                          onCheckedChange={(checked) => setPublishSettings({ ...publishSettings, publishNow: checked })}
+                          onCheckedChange={(checked) =>
+                            setPublishSettings({
+                              ...publishSettings,
+                              publishNow: checked,
+                            })
+                          }
                         />
                       </div>
                     </div>
 
                     <div className="flex space-x-2">
-                      <Button variant="outline" onClick={() => setIsPublishDialogOpen(false)} className="flex-1">
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsPublishDialogOpen(false)}
+                        className="flex-1"
+                      >
                         Cancel
                       </Button>
-                      <Button onClick={handlePublish} className="flex-1" disabled={!title.trim() || !content.trim() || !category}>
+                      <Button
+                        onClick={handlePublish}
+                        className="flex-1"
+                        disabled={!title.trim() || !content.trim() || !category}
+                      >
                         Publish Article
                       </Button>
                     </div>
@@ -341,21 +405,18 @@ if (loading || !user) {
 
               {user && (
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.user_metadata?.avatar_url || "/placeholder.svg"} />
-                  <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                  <AvatarImage
+                    src={user.user_metadata?.avatar_url || "/placeholder.svg"}
+                  />
+                  <AvatarFallback>
+                    {user.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
               )}
             </div>
           </div>
         </div>
       </header>
-
-      {/* User Status Debug (remove in production) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 text-sm">
-          Debug: User ID: {user?.id || 'No user ID'} | Email: {user?.email || 'No email'}
-        </div>
-      )}
 
       {/* Editor */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -388,11 +449,17 @@ if (loading || !user) {
           {user && (
             <div className="flex items-center space-x-3 py-4">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={user.user_metadata?.avatar_url || "/placeholder.svg"} />
-                <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                <AvatarImage
+                  src={user.user_metadata?.avatar_url || "/placeholder.svg"}
+                />
+                <AvatarFallback>
+                  {user.email?.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
+                <p className="font-medium">
+                  {user.user_metadata?.full_name || user.email}
+                </p>
                 <p className="text-sm text-gray-500">
                   {new Date().toLocaleDateString("en-US", {
                     year: "numeric",
@@ -416,14 +483,14 @@ if (loading || !user) {
                 border: none !important;
                 min-height: 500px !important;
               }
-              
+
               .ql-editor.ql-blank::before {
                 color: #9ca3af !important;
                 font-style: normal !important;
                 font-size: 1.125rem !important;
                 line-height: 1.75rem !important;
               }
-              
+
               .ql-toolbar {
                 border: none !important;
                 border-bottom: 1px solid #e5e7eb !important;
@@ -434,57 +501,57 @@ if (loading || !user) {
                 background: white !important;
                 z-index: 40 !important;
               }
-              
+
               .ql-container {
                 border: none !important;
                 font-family: inherit !important;
               }
-              
+
               .ql-toolbar .ql-formats {
                 margin-right: 1rem !important;
               }
-              
+
               .ql-toolbar button {
                 padding: 0.375rem !important;
                 margin: 0 0.125rem !important;
                 border-radius: 0.375rem !important;
               }
-              
+
               .ql-toolbar button:hover {
                 background-color: #f3f4f6 !important;
               }
-              
+
               .ql-toolbar button.ql-active {
                 background-color: #dbeafe !important;
                 color: #2563eb !important;
               }
-              
+
               .ql-editor h1 {
                 font-size: 2rem !important;
                 font-weight: 700 !important;
                 margin: 1.5rem 0 1rem 0 !important;
                 line-height: 1.25 !important;
               }
-              
+
               .ql-editor h2 {
                 font-size: 1.5rem !important;
                 font-weight: 600 !important;
                 margin: 1.25rem 0 0.75rem 0 !important;
                 line-height: 1.375 !important;
               }
-              
+
               .ql-editor h3 {
                 font-size: 1.25rem !important;
                 font-weight: 600 !important;
                 margin: 1rem 0 0.5rem 0 !important;
                 line-height: 1.5 !important;
               }
-              
+
               .ql-editor p {
                 margin: 0.75rem 0 !important;
                 line-height: 1.75rem !important;
               }
-              
+
               .ql-editor blockquote {
                 border-left: 4px solid #e5e7eb !important;
                 padding-left: 1rem !important;
@@ -492,25 +559,26 @@ if (loading || !user) {
                 font-style: italic !important;
                 color: #6b7280 !important;
               }
-              
-              .ql-editor ul, .ql-editor ol {
+
+              .ql-editor ul,
+              .ql-editor ol {
                 margin: 0.75rem 0 !important;
                 padding-left: 1.5rem !important;
               }
-              
+
               .ql-editor li {
                 margin: 0.25rem 0 !important;
                 line-height: 1.75rem !important;
               }
-              
+
               .ql-editor code {
                 background-color: #f3f4f6 !important;
                 padding: 0.125rem 0.25rem !important;
                 border-radius: 0.25rem !important;
-                font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+                font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace !important;
                 font-size: 0.875rem !important;
               }
-              
+
               .ql-editor pre {
                 background-color: #f8fafc !important;
                 border: 1px solid #e2e8f0 !important;
@@ -519,23 +587,23 @@ if (loading || !user) {
                 margin: 1rem 0 !important;
                 overflow-x: auto !important;
               }
-              
+
               .ql-editor img {
                 max-width: 100% !important;
                 height: auto !important;
                 margin: 1rem 0 !important;
                 border-radius: 0.5rem !important;
               }
-              
+
               .ql-editor a {
                 color: #2563eb !important;
                 text-decoration: underline !important;
               }
-              
+
               .ql-editor a:hover {
                 color: #1d4ed8 !important;
               }
-              
+
               /* Custom dropdown styles */
               .ql-picker-options {
                 background: white !important;
@@ -543,11 +611,11 @@ if (loading || !user) {
                 border-radius: 0.5rem !important;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
               }
-              
+
               .ql-picker-item {
                 padding: 0.5rem 0.75rem !important;
               }
-              
+
               .ql-picker-item:hover {
                 background-color: #f3f4f6 !important;
               }
@@ -589,14 +657,19 @@ if (loading || !user) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="text-sm text-gray-500">Last saved: {new Date().toLocaleTimeString()}</div>
+            <div className="text-sm text-gray-500">
+              Last saved: {new Date().toLocaleTimeString()}
+            </div>
           </div>
 
           {/* Writing Tips */}
           <div className="bg-gray-50 rounded-lg p-6 mt-12">
             <h3 className="font-semibold mb-3">Writing Tips</h3>
             <ul className="text-sm text-gray-600 space-y-2">
-              <li>• Use the toolbar to format your text with headings, bold, italic, and more</li>
+              <li>
+                • Use the toolbar to format your text with headings, bold,
+                italic, and more
+              </li>
               <li>• Add images by clicking the image icon in the toolbar</li>
               <li>• Use blockquotes to highlight important information</li>
               <li>• Create lists to organize your content clearly</li>
@@ -607,5 +680,5 @@ if (loading || !user) {
         </div>
       </main>
     </div>
-  )
+  );
 }

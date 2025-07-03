@@ -4,8 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 // Cloudinary config
 cloudinary.config({
@@ -16,6 +14,7 @@ cloudinary.config({
 
 // Validation schema
 const createArticleSchema = z.object({
+  userId: z.string().min(1, "User must be logged in"),
   title: z.string().min(3, "Title is too short").max(100),
   category: z.string().min(3, "Category is too short").max(50),
   content: z.string().min(10, "Content is too short"),
@@ -39,6 +38,7 @@ export const createArticles = async (
   formData: FormData
 ): Promise<CreateArticleResult> => {
   const parsed = createArticleSchema.safeParse({
+    userId: formData.get("userId"),
     title: formData.get("title"),
     category: formData.get("category"),
     content: formData.get("content"),
@@ -50,33 +50,19 @@ export const createArticles = async (
       errors: parsed.error.flatten().fieldErrors,
     };
   }
+  const userId = parsed.data.userId;
 
-  const supabase = createServerComponentClient({ cookies });
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return {
-      success: false,
-      errors: {
-        formErrors: ["You must be logged in to publish an article."],
-      },
-    };
-  }
-
-  let existingUser = await prisma.user.findUnique({
-    where: { email: user.email! },
+  let existingUser = await prisma.profile.findUnique({
+    where: { id: userId },
   });
 
   if (!existingUser) {
-    existingUser = await prisma.user.create({
+    existingUser = await prisma.profile.create({
       data: {
-        id: user.id,
-        email: user.email!,
-        name: user.user_metadata.full_name ?? "Anonymous",
-        image: user.user_metadata.avatar_url ?? null,
+        id: userId,
+        email: `user-${userId}@echo.fake`,
+        fullName: "Anonymous",
+        avatarUrl: null,
       },
     });
   }
@@ -119,13 +105,35 @@ export const createArticles = async (
     };
   }
 
-  await prisma.post.create({
+  const categoryName = parsed.data.category.trim().toLowerCase()
+  const categoryRecord = await prisma.category.upsert({
+  where: { name: categoryName },
+  update: {}, // No updates — just retrieve if exists
+  create: { 
+    name: categoryName,
+    slug: categoryName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, ""),
+  },
+})
+
+
+  await prisma.article.create({
     data: {
       title: parsed.data.title,
-      category: parsed.data.category,
+      slug: parsed.data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, ""),
+      category: {
+        connect: { id: categoryRecord.id },
+      },
       content: parsed.data.content,
       featuredImage: uploadResult.secure_url,
-      authorId: existingUser.id,
+      author: {
+        connect: { id: userId },
+      },
     },
   });
 

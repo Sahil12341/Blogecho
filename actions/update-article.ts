@@ -66,7 +66,7 @@ export const updateArticles = async (
   }
 
   // Fetch article
-  const existingArticle = await prisma.post.findUnique({
+  const existingArticle = await prisma.article.findUnique({
     where: { id: articleId },
   });
 
@@ -77,7 +77,7 @@ export const updateArticles = async (
   }
 
   // Find your user in DB using Supabase email
-  const dbUser = await prisma.user.findUnique({
+  const dbUser = await prisma.profile.findUnique({
     where: { email: user.email },
   });
 
@@ -115,11 +115,13 @@ export const updateArticles = async (
 
   // Update article
   try {
-    await prisma.post.update({
+    await prisma.article.update({
       where: { id: articleId },
       data: {
         title: result.data.title,
-        category: result.data.category,
+        category: {
+          connect: { name: result.data.category },
+        },
         content: result.data.content,
         featuredImage: imageUrl,
       },

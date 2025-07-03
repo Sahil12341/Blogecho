@@ -17,14 +17,6 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
-                <Link
-                  href="/"
-                  className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  <span>Back to Home</span>
-                </Link>
-                <div className="h-6 w-px bg-gray-300" />
                 <div className="flex items-center space-x-2">
                   <Link href="/" className="flex items-center space-x-2">
                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-3xl font-semibold">

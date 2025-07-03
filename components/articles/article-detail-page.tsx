@@ -1,5 +1,3 @@
-"use client";
-
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { MessageCircle } from "lucide-react";
@@ -18,7 +16,7 @@ type ArticleDetailPageProps = {
     category?: string | null;
     createdAt: Date;
     author?: {
-      name?: string | null;
+      fullName?: string | null;
       email?: string | null;
       image?: string | null;
     } | null;
@@ -27,7 +25,7 @@ type ArticleDetailPageProps = {
 
 export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
   try {
-    const supabase = createServerComponentClient({ cookies: () => cookies() });
+    const supabase = createServerComponentClient({ cookies });
 
     const [
       comments,
@@ -38,20 +36,19 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
     ] = await Promise.all([
       prisma.comment.findMany({
         where: {
-          postId: article.id,
+          articleId: article.id,
         },
         include: {
           author: {
             select: {
-              name: true,
               email: true,
-              image: true,
+              fullName : true,
             },
           },
         },
       }),
-      prisma.like.findMany({
-        where: { postId: article.id },
+      prisma.articleLike.findMany({
+        where: { articleId: article.id },
       }),
       supabase.auth.getUser(),
     ]);
@@ -60,7 +57,7 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
     let dbUser: { id: string } | null = null;
 
     if (user && user.email) {
-      dbUser = await prisma.user.findUnique({
+      dbUser = await prisma.profile.findUnique({
         where: { email: user.email },
         select: { id: true },
       });
@@ -92,12 +89,12 @@ export async function ArticleDetailPage({ article }: ArticleDetailPageProps) {
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={article.author?.image || ""} />
                   <AvatarFallback>
-                    {article.author?.name?.charAt(0)?.toUpperCase() || "U"}
+                    {article.author?.fullName?.charAt(0)?.toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium text-foreground">
-                    {article.author?.name || "Anonymous"}
+                    {article.author?.fullName || "Anonymous"}
                   </p>
                   <p className="text-sm">
                     {article.createdAt.toDateString()} · 12 min read

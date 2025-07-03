@@ -22,7 +22,7 @@ export const createComments = async (
   prevState: CreateCommentFormState,
   formData: FormData
 ): Promise<CreateCommentFormState> => {
-  // 🛡️ Validate form data
+  // Validate form data
   const result = createCommentSchema.safeParse({
     body: formData.get("body") as string,
   });
@@ -53,7 +53,7 @@ export const createComments = async (
     throw new Error("User email not found");
   }
   // Check if user exists in your DB
-  let existingUser = await prisma.user.findUnique({
+  let existingUser = await prisma.profile.findUnique({
     where: { email: user.email },
   });
 
@@ -61,12 +61,12 @@ export const createComments = async (
     const fullName = user.user_metadata?.full_name ?? "Anonymous";
     const avatar = user.user_metadata?.avatar_url ?? null;
 
-    existingUser = await prisma.user.create({
+    existingUser = await prisma.profile.create({
       data: {
         id: user.id,
         email: user.email,
-        name: fullName,
-        image: avatar,
+        fullName: fullName,
+        avatarUrl: avatar,
       },
     });
   }
@@ -75,9 +75,11 @@ export const createComments = async (
   try {
     await prisma.comment.create({
       data: {
-        body: result.data.body,
+        content: result.data.body,
         authorId: existingUser.id,
-        postId: articleId,
+        articleId: articleId,
+        authorName: existingUser.fullName || "Anonymous",
+        authorEmail: existingUser.email,
       },
     });
   } catch (error: unknown) {
@@ -96,7 +98,6 @@ export const createComments = async (
     }
   }
 
-  // ✅ Revalidate path to show the new comment
   revalidatePath(`/articles/${articleId}`);
 
   return { errors: {} };

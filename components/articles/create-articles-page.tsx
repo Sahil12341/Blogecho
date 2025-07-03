@@ -1,21 +1,32 @@
 "use client";
-import { FormEvent, startTransition, useActionState, useState } from "react";
+
+import { FormEvent, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
 import "react-quill-new/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { createArticles } from "@/actions/create-articles";
+import { useAuth } from "@/hooks/use-auth"; // custom hook to get user
+
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
- 
+
 export default function CreateArticlePage() {
   const [content, setContent] = useState("");
+  type FormState =
+    | { errors: { [key: string]: string[] } }
+    | { success: true };
 
-  const [formState, action, isPending] = useActionState(createArticles, {
-    errors: {},
-  });
- 
+  const [formState, setFormState] = useState<FormState>({ errors: {} });
+  const [isPending, startTransition] = useTransition();
+
+  const { user } = useAuth(); // Assuming you have access to the Supabase user
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,12 +34,21 @@ export default function CreateArticlePage() {
     const formData = new FormData(event.currentTarget);
     formData.append("content", content);
 
-    // Wrap the action call in startTransition
-    startTransition(() => {
-      action(formData);
+    if (!user?.id) {
+      setFormState({
+        errors: { formErrors: ["You must be logged in to publish an article."] },
+      });
+      return;
+    }
+
+    formData.append("userId", user.id);
+
+    startTransition(async () => {
+      const result = await createArticles(undefined, formData);
+      setFormState(result);
     });
   };
- 
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <Card>
@@ -39,14 +59,10 @@ export default function CreateArticlePage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title">Article Title</Label>
-              <Input
-                id="title"
-                name="title"
-                placeholder="Enter article title"
-              />
-              {formState.errors.title && (
+              <Input id="title" name="title" placeholder="Enter article title" />
+              {"errors" in formState && formState.errors.title && (
                 <span className="font-medium text-sm text-red-500">
-                  {formState.errors.title}
+                  {formState.errors.title[0]}
                 </span>
               )}
             </div>
@@ -56,61 +72,54 @@ export default function CreateArticlePage() {
               <select
                 id="category"
                 name="category"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="">Select Category</option>
                 <option value="technology">Technology</option>
                 <option value="programming">Programming</option>
                 <option value="web-development">Web Development</option>
               </select>
-              {formState.errors.category && (
+              {"errors" in formState && formState.errors.category && (
                 <span className="font-medium text-sm text-red-500">
-                  {formState.errors.category}
+                  {formState.errors.category[0]}
                 </span>
               )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="featuredImage">Featured Image</Label>
-              <Input
-                id="featuredImage"
-                name="featuredImage"
-                type="file"
-                accept="image/*"
-              />
-              {formState.errors.featuredImage && (
+              <Input id="featuredImage" name="featuredImage" type="file" accept="image/*" />
+              {"errors" in formState && formState.errors.featuredImage && (
                 <span className="font-medium text-sm text-red-500">
-                  {formState.errors.featuredImage}
+                  {formState.errors.featuredImage[0]}
                 </span>
               )}
             </div>
 
             <div className="space-y-2">
               <Label>Content</Label>
-              <ReactQuill
-                theme="snow"
-                value={content}
-                onChange={setContent} 
-              />
-              {formState.errors.content && (
+              <ReactQuill theme="snow" value={content} onChange={setContent} />
+              {"errors" in formState && formState.errors.content && (
                 <span className="font-medium text-sm text-red-500">
                   {formState.errors.content[0]}
                 </span>
               )}
             </div>
-            {formState.errors.formErrors && (
-              <div className="dark:bg-transparent bg-red-100 p-2 border border-red-600">
+
+            {"errors" in formState && formState.errors.formErrors && (
+              <div className="bg-red-100 dark:bg-transparent p-2 border border-red-600">
                 <span className="font-medium text-sm text-red-500">
-                  {formState.errors.formErrors}
+                  {formState.errors.formErrors[0]}
                 </span>
               </div>
             )}
+
             <div className="flex justify-end gap-4">
               <Button type="button" variant="outline">
                 Cancel
               </Button>
               <Button disabled={isPending} type="submit">
-                {isPending ? "Loading..." : "Publish Article"}
+                {isPending ? "Publishing..." : "Publish Article"}
               </Button>
             </div>
           </form>

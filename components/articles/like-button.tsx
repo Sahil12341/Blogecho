@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, Share2, ThumbsUp } from "lucide-react";
 import React, { useOptimistic, useTransition } from "react";
 import { toggleLike } from "@/actions/like-toggle";
-import type { Like } from "@/app/generated/prisma"
+
+type Like = {
+  id: string;
+  userId: string;
+  articleId: string;
+  // Add other fields as needed based on your schema
+};
 
 type LikeButtonProps = {
   articleId: string;

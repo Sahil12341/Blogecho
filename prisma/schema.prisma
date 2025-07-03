@@ -109,7 +109,6 @@ model Category {
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  
   // Relations
   articles Article[]
   

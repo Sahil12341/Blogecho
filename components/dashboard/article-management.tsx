@@ -21,79 +21,37 @@ import {
   Search, MoreHorizontal, Edit, Trash2, Eye, Plus,
 } from "lucide-react"
 
-const articles = [
-  {
-    id: 1,
-    title: "Getting Started with Next.js 14",
-    author: "John Doe",
-    category: "Technology",
-    status: "Published",
-    views: 1234,
-    comments: 23,
-    date: "2024-01-15",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Advanced React Patterns",
-    author: "Jane Smith",
-    category: "Programming",
-    status: "Draft",
-    views: 0,
-    comments: 0,
-    date: "2024-01-14",
-    featured: false,
-  },
-  {
-    id: 3,
-    title: "CSS Grid vs Flexbox",
-    author: "Mike Johnson",
-    category: "Design",
-    status: "Published",
-    views: 856,
-    comments: 12,
-    date: "2024-01-13",
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "TypeScript Best Practices",
-    author: "Sarah Wilson",
-    category: "Programming",
-    status: "Published",
-    views: 2341,
-    comments: 45,
-    date: "2024-01-12",
-    featured: true,
-  },
-  {
-    id: 5,
-    title: "Building Responsive Layouts",
-    author: "Alex Brown",
-    category: "Design",
-    status: "Scheduled",
-    views: 0,
-    comments: 0,
-    date: "2024-01-20",
-    featured: false,
-  },
-]
+type Article = {
+  id: string;
+  title: string;
+  author: { fullName: string };
+  category: { name: string };
+  status: string;
+  comments: { id: string }[];
+  featured: boolean;
+  createdAt: string;
+  views: number;
+};
 
-export function ArticlesManagement() {
-  const router = useRouter()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [categoryFilter, setCategoryFilter] = useState("all")
+export function ArticlesManagement({ articles }: { articles: Article[] }) {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const filteredArticles = articles.filter((article) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.author.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || article.status.toLowerCase() === statusFilter
-    const matchesCategory = categoryFilter === "all" || article.category.toLowerCase() === categoryFilter
+      article.author.fullName.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesSearch && matchesStatus && matchesCategory
-  })
+    const matchesStatus =
+      statusFilter === "all" || article.status.toLowerCase() === statusFilter;
+
+    const matchesCategory =
+      categoryFilter === "all" || article.category.name.toLowerCase() === categoryFilter;
+
+    return matchesSearch && matchesStatus && matchesCategory;
+  });
 
   return (
     <div className="space-y-6">
@@ -184,9 +142,9 @@ export function ArticlesManagement() {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>{article.author}</TableCell>
+                  <TableCell>{article.author.fullName}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{article.category}</Badge>
+                    <Badge variant="outline">{article.category.name}</Badge>
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -202,8 +160,8 @@ export function ArticlesManagement() {
                     </Badge>
                   </TableCell>
                   <TableCell>{article.views.toLocaleString()}</TableCell>
-                  <TableCell>{article.comments}</TableCell>
-                  <TableCell>{article.date}</TableCell>
+                  <TableCell>{article.comments.length}</TableCell>
+                  <TableCell>{article.createdAt}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

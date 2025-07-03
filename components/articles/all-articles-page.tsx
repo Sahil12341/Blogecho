@@ -2,11 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; 
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { Prisma } from "@/app/generated/prisma";
 import Link from "next/link";
+import { Prisma } from "@/lib/generated/prisma";
 
 type SearchPageProps = {
-  articles: Prisma.PostGetPayload<{
+  articles: Prisma.ArticleGetPayload<{
     include:{
       author:{
         select:{
@@ -45,7 +45,7 @@ export function AllArticlesPage({ articles }: SearchPageProps) {
             <h3 className="text-xl font-semibold text-foreground">
               {article.title}
             </h3>
-            <p className="mt-2 text-muted-foreground">{article.category}</p>
+            <p className="mt-2 text-muted-foreground">{article.categoryId}</p>
 
             {/* Author & Metadata */}
             <div className="mt-6 flex items-center justify-between">

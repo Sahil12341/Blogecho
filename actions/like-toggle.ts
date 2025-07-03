@@ -18,7 +18,7 @@ export async function toggleLike(postId: string) {
   }
 
   // Ensure the user exists in your local database
-  const dbUser = await prisma.user.findUnique({
+  const dbUser = await prisma.profile.findUnique({
     where: { email: user.email! }, // or supabaseUserId: user.id if you track it
   });
 
@@ -27,23 +27,23 @@ export async function toggleLike(postId: string) {
   }
 
   // Check if the user already liked the post
-  const existingLike = await prisma.like.findFirst({
+  const existingLike = await prisma.articleLike.findFirst({
     where: {
-      postId,
+      articleId: postId,
       userId: dbUser.id,
     },
   });
 
   if (existingLike) {
     // Unlike
-    await prisma.like.delete({
+    await prisma.articleLike.delete({
       where: { id: existingLike.id },
     });
   } else {
     // Like
-    await prisma.like.create({
+    await prisma.articleLike.create({
       data: {
-        postId,
+        articleId: postId,
         userId: dbUser.id,
       },
     });

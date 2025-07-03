@@ -1,11 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { prisma } from "@/lib/prisma";
 import Image from "next/image";
-import { ArrowRight, Badge, Calendar, User } from "lucide-react";
+import { ArrowRight, Calendar, User } from "lucide-react";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 export default async function TopArticles() {
-  const articles = await prisma.post.findMany({
+  const articles = await prisma.article.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -13,9 +15,13 @@ export default async function TopArticles() {
       comments: true,
       author: {
         select: {
-          name: true,
           email: true,
-          image: true,
+          username:true
+        },
+      },
+      category: {
+        select: {
+          name: true,
         },
       },
     },
@@ -32,14 +38,15 @@ export default async function TopArticles() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            {articles.map((post) => (
-              <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            {articles.slice(0,2).map((post) => (
+              <Link href={`/articles/${post.id}`} key={post.id} >
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative h-48">
                   <Image src={post.featuredImage || "/placeholder.svg"} alt={post.title} fill className="object-cover" />
                   <Badge
-                    className={`absolute top-4 left-4 ${post.category === "Technology" ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"}`}
+                    className={`absolute top-4 left-4 ${post.category?.name === "Technology" ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"}`}
                   >
-                    {post.category}
+                    {post.category?.name}
                   </Badge>
                 </div>
                 <CardContent className="p-6">
@@ -49,13 +56,14 @@ export default async function TopArticles() {
                   </p>
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex items-center space-x-4">
-                      <span>{post.author?.name}</span>
+                      <span>{post.author?.username}</span>
                       <span>•</span>
                       <span>{new Date(post.createdAt).toDateString()}</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
+              </Link>
             ))}
           </div>
         </div>
@@ -79,16 +87,17 @@ export default async function TopArticles() {
               .slice(0, 4)
               .map((post) => ({
                 ...post,
-                author: post.author?.name || "Unknown",
+                author: post.author?.username,
                 date: new Date(post.createdAt).toLocaleDateString(),
                 readTime: `${Math.max(1, Math.round((post.content.length || 0) / 500))} min read`,
               }));
             return (
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {recentPosts.map((post) => (
-                  <Card key={post.id} className="hover:shadow-md transition-shadow">
+                  <Link href={`/articles/${post.id}`} key={post.id}  >
+                  <Card className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
-                      <Badge className="mb-3 bg-gray-100 text-gray-800">{post.category}</Badge>
+                      <Badge className="mb-3 bg-gray-100 text-gray-800">{post.category?.name}</Badge>
                       <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2">{post.title}</h3>
                       <div className="text-sm text-gray-500 space-y-1">
                         <div className="flex items-center space-x-2">
@@ -103,6 +112,7 @@ export default async function TopArticles() {
                       </div>
                     </CardContent>
                   </Card>
+                  </Link>
                 ))}
               </div>
             );

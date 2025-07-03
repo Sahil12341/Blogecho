@@ -1,7 +1,7 @@
 "use client"
 
 import { WriteEditor } from "@/components/text-editor/write-editor"
-import { AuthProvider, useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks/use-auth"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,7 +11,7 @@ import Link from "next/link"
 import { createArticles } from "@/actions/create-articles"
 
 function WritePageContent() {
-  const { user, profile, loading, profileLoading } = useAuth()
+  const { user, loading } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function WritePageContent() {
       formData.set("title", content.title)
       formData.set("category", content.category)
       formData.set("content", content.content)
-      formData.set("featuredImageUrl", content.featuredImage || "")
+      formData.set("featuredImage", content.featuredImage)
 
       const result = await createArticles({}, formData)
 
@@ -128,7 +128,7 @@ function WritePageContent() {
   }
 
   // Show profile loading state
-  if (profileLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -156,8 +156,6 @@ function WritePageContent() {
 
 export default function WritePage() {
   return (
-    <AuthProvider>
       <WritePageContent />
-    </AuthProvider>
   )
 }

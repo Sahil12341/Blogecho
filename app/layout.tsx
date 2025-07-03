@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SupabaseProvider from "@/components/providers/supabase-provider";
+import { AuthProvider } from "@/hooks/use-auth";
 
 export const metadata: Metadata = {
   title: "ECHO",
@@ -18,7 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       >
         <SupabaseProvider>
+          <AuthProvider>
           {children}
+          </AuthProvider>
         </SupabaseProvider>
       </body>
     </html>
